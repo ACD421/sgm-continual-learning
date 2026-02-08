@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pkl
+*.npz
+*.mmap
+.env
+*.egg-info/
+dist/
+build/
+.vscode/
+.idea/
