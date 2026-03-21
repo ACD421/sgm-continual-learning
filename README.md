@@ -35,16 +35,6 @@ This is not regularization. This is not approximation. The gradient interference
 | 1000 sequential tasks | 1.0000x | 0.000000 |
 | Baseline (no locking) | 0.0002x | 5285.65x worse |
 
-### Plasticity
-
-Binary locking does not sacrifice learning capacity:
-
-| Metric | Value |
-|--------|-------|
-| Plasticity alpha | 0.035-0.060 |
-| Learning curve | Exponential |
-| Capacity utilization | Efficient (locked dims are converged, not wasted) |
-
 ## How It Works
 
 1. **Train** on task T_i normally
@@ -66,54 +56,70 @@ The key insight: converged dimensions have found their correct value. Allowing f
 
 Binary locking achieves exact zero interference with O(1) cost per locked dimension and no capacity waste (locked dimensions are genuinely converged).
 
-## Architecture
+## Structure
 
 ```
 core/
-|-- sgm.py               # Core SGM primitive with binary locking
-|-- geometric_space.py    # Geometric representation of knowledge
-|-- lock_manager.py       # Convergence detection and lock logic
-+-- metrics.py            # Retention and plasticity measurement
+|-- sgm_core_primitives.py   # SGM primitive with coalition locking and ablation testing
+|-- sgm_demo.py              # One-command proof: structure preservation breaks scaling curves
++-- sgm_model_primitives.py  # Neural network integration of binary locking
 
 experiments/
-|-- continual_20.py       # 20-task sequential benchmark
-|-- continual_100.py      # 100-task stress test
-|-- continual_1000.py     # 1000-task extreme validation
-|-- forgetting_curve.py   # Retention over time
-+-- plasticity_sweep.py   # Alpha dynamics analysis
+|-- academic_validation.py   # Rigorous academic benchmark suite
+|-- academic_validation_v2.py
+|-- masked_forward_isolation.py  # Forward isolation verification
+|-- mnist_cifar_combined.py  # Real dataset validation
+|-- plasticity_amplification.py  # Plasticity dynamics analysis
+|-- real_benchmarks.py       # Benchmark against EWC, PackNet, replay
++-- split_mnist.py           # Standard split-MNIST continual learning
 
 tests/
-|-- test_retention.py     # Verify 1.0000x retention
-|-- test_interference.py  # Verify 0.000000 interference
-|-- test_plasticity.py    # Verify exponential alpha
-+-- test_stress.py        # Adversarial task sequences
+|-- comprehensive.py         # Full test suite
+|-- dense_overlap.py         # Overlapping task dimensions
+|-- extreme_scale.py         # 1000-task stress test
+|-- hierarchical_task_sim.py # Hierarchical task structures
+|-- model_scaling.py         # Scaling behavior analysis
+|-- overlap_adaptation.py    # Adaptive overlap handling
+|-- quantization.py          # Post-training quantization effects
+|-- realworld_stress.py      # Adversarial task sequences
+|-- sklearn_digits.py        # Real data: sklearn digits
+|-- split_mnist_minimal.py   # Minimal split-MNIST
++-- ultimate_stress.py       # Extreme adversarial conditions
 ```
 
 ## Quick Start
 
 ```python
-from core.sgm import SGM
+from core.sgm_core_primitives import SGMWithLocking, SparseRegionTask
+import numpy as np
 
-model = SGM(dim=128)
+model = SGMWithLocking(dim=128)
 
 # Train on task 1
-model.train(task_1_data)
-model.lock_converged()  # Lock stable dimensions
+task1 = SparseRegionTask(128, (0.0, 0.3))
+model.train_task(task1, n_evals=500)
 
 # Train on task 2 -- task 1 knowledge is UNTOUCHABLE
-model.train(task_2_data)
-model.lock_converged()
+task2 = SparseRegionTask(128, (0.3, 0.6))
+model.train_task(task2, n_evals=500)
 
 # Verify
-print(model.evaluate(task_1_data))  # 1.0000x -- perfect retention
-print(model.evaluate(task_2_data))  # Learned normally
+print(f"Task 1 retention: {model.evaluate(task1):.4f}x")  # 1.0000x
+```
+
+Or run the one-command demo:
+
+```bash
+python core/sgm_demo.py
 ```
 
 ## Reproducibility
 
 ```bash
-python -m pytest tests/
-python experiments/continual_1000.py  # Full 1000-task validation
+python tests/comprehensive.py       # Full validation suite
+python tests/extreme_scale.py       # 1000-task stress test
+python tests/dense_overlap.py       # Overlapping dimension tests
+python experiments/real_benchmarks.py  # Comparison against baselines
 ```
 
 ## Related
