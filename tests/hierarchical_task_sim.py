@@ -4,10 +4,10 @@ SGM CIFAR/Natural Language Simulation
 
 This script simulates hierarchical image tasks and natural language tasks
 using the Sparse Gradient Mutation (SGM) framework.  The goal is to
-approximate more realistic scenarios, such as CIFAR‐like overlapping
-feature spaces and bag‑of‑words text classification, under the
+approximate more realistic scenarios, such as CIFAR-like overlapping
+feature spaces and bag-of-words text classification, under the
 constraints of the available environment (no external deep learning
-libraries or large datasets).  We re‑use the simple feed‑forward model
+libraries or large datasets).  We re-use the simple feed-forward model
 and SGM algorithms from ``sgm_model_tests.py`` and define synthetic
 tasks with overlapping input masks to mimic hierarchical structure and
 shared vocabulary.
@@ -16,15 +16,15 @@ The script runs both a baseline evolutionary optimizer (no locking) and
 the locked SGM on two sets of tasks:
 
 1. **Hierarchical tasks:** Three tasks with partially overlapping
-   regions of a 1‑dimensional feature space.  These tasks simulate
-   hierarchical image features, where low‑level features are shared
-   across tasks and higher‑level features are unique.  Each task
+   regions of a 1-dimensional feature space.  These tasks simulate
+   hierarchical image features, where low-level features are shared
+   across tasks and higher-level features are unique.  Each task
    consists of random inputs masked by the active region and a random
    target output vector.
 
 2. **Natural language tasks:** Three tasks where each task activates a
    different set of dimensions representing "words" in a
-   bag‑of‑words encoding.  Overlaps between tasks simulate shared
+   bag-of-words encoding.  Overlaps between tasks simulate shared
    vocabulary.  Although no real text is used, the structure mimics
    the way classification tasks may share common terms.
 
@@ -91,23 +91,23 @@ def run_task_sequence(tasks: List[ModelTask], model_dim: int, n_evals: int = 300
 
 def simulate_hierarchical_tasks() -> None:
     """Simulate a set of hierarchical tasks and print retention results."""
-    print("\n=== Hierarchical CIFAR‑like tasks ===")
+    print("\n=== Hierarchical CIFAR-like tasks ===")
     # Use a moderate input dimension to approximate image features
     input_dim = 120
     model = NNModel(input_dim=input_dim, hidden_dim1=64, hidden_dim2=32, output_dim=16)
     # Define three tasks with overlapping active regions
     tasks = []
-    # Task1: dims 0–49 active (base + unique1)
+    # Task1: dims 0--49 active (base + unique1)
     mask1 = np.zeros(input_dim, dtype=bool)
     mask1[0:50] = True
     target1 = np.random.randn(model.output_dim).astype(np.float32) * 0.5
     tasks.append(ModelTask(model, mask1, target1, n_samples=3, seed=42))
-    # Task2: dims 30–79 active (overlap with task1 on 30–49)
+    # Task2: dims 30--79 active (overlap with task1 on 30--49)
     mask2 = np.zeros(input_dim, dtype=bool)
     mask2[30:80] = True
     target2 = np.random.randn(model.output_dim).astype(np.float32) * 0.5
     tasks.append(ModelTask(model, mask2, target2, n_samples=3, seed=43))
-    # Task3: dims 60–109 active (overlap with task2 on 60–79)
+    # Task3: dims 60--109 active (overlap with task2 on 60--79)
     mask3 = np.zeros(input_dim, dtype=bool)
     mask3[60:110] = True
     target3 = np.random.randn(model.output_dim).astype(np.float32) * 0.5
@@ -119,23 +119,23 @@ def simulate_hierarchical_tasks() -> None:
 
 
 def simulate_natural_language_tasks() -> None:
-    """Simulate a set of bag‑of‑words natural language tasks and print results."""
-    print("\n=== Natural language bag‑of‑words tasks ===")
+    """Simulate a set of bag-of-words natural language tasks and print results."""
+    print("\n=== Natural language bag-of-words tasks ===")
     # Use a smaller dimension representing vocabulary size
     vocab_dim = 100
     model = NNModel(input_dim=vocab_dim, hidden_dim1=64, hidden_dim2=32, output_dim=8)
     tasks = []
-    # Task1: 'sports' vs 'politics': dims 0–39 active (0–9 common words, 10–19 sports, 20–29 politics, 30–39 unique overlap)
+    # Task1: 'sports' vs 'politics': dims 0--39 active (0--9 common words, 10--19 sports, 20--29 politics, 30--39 unique overlap)
     mask1 = np.zeros(vocab_dim, dtype=bool)
     mask1[0:40] = True
     target1 = np.random.randn(model.output_dim).astype(np.float32) * 0.5
     tasks.append(ModelTask(model, mask1, target1, n_samples=3, seed=100))
-    # Task2: 'politics' vs 'science': dims 20–59 active (20–29 politics again, 30–39 overlap, 40–49 science, 50–59 unique overlap)
+    # Task2: 'politics' vs 'science': dims 20--59 active (20--29 politics again, 30--39 overlap, 40--49 science, 50--59 unique overlap)
     mask2 = np.zeros(vocab_dim, dtype=bool)
     mask2[20:60] = True
     target2 = np.random.randn(model.output_dim).astype(np.float32) * 0.5
     tasks.append(ModelTask(model, mask2, target2, n_samples=3, seed=101))
-    # Task3: 'science' vs 'arts': dims 40–79 active (40–49 science again, 50–59 overlap, 60–69 arts, 70–79 unique overlap)
+    # Task3: 'science' vs 'arts': dims 40--79 active (40--49 science again, 50--59 overlap, 60--69 arts, 70--79 unique overlap)
     mask3 = np.zeros(vocab_dim, dtype=bool)
     mask3[40:80] = True
     target3 = np.random.randn(model.output_dim).astype(np.float32) * 0.5

@@ -1,5 +1,5 @@
 """
-SGM Comprehensive Demo — All tests active
+SGM Comprehensive Demo -- All tests active
 =========================================
 This script assumes that sgm_rigorous_tests.py, fractal_cosetting_experiment.py,
 and related modules from the sgm_repo are on your Python path.  It runs the
@@ -10,8 +10,8 @@ following tests in sequence and prints summary metrics:
 3. Saturation under minimal free parameters.
 4. Contradictory/adversarial tasks.
 5. Partial and random overlap tasks.
-6. Synthetic hierarchical (CIFAR‑like) tasks.
-7. Synthetic bag‑of‑words (natural‑language‑like) tasks.
+6. Synthetic hierarchical (CIFAR-like) tasks.
+7. Synthetic bag-of-words (natural-language-like) tasks.
 8. Fractal cosetting retention.
 9. Noise perturbation robustness.
 
@@ -155,10 +155,10 @@ def overlap_tests():
             else:
                 b_ratios.append(t.loss(baseline.best_x) / base_ref)
                 l_ratios.append(t.loss(locking.best_x) / lock_ref)
-        print(f"{name} – baseline {np.mean(b_ratios):.2f}, locked {np.mean(l_ratios):.2f}")
+        print(f"{name} -- baseline {np.mean(b_ratios):.2f}, locked {np.mean(l_ratios):.2f}")
 
 def hierarchical_natty_tests():
-    print("\n=== Hierarchical (CIFAR‑like) and Bag‑of‑Words (Natty) Tests ===")
+    print("\n=== Hierarchical (CIFAR-like) and Bag-of-Words (Natty) Tests ===")
     dims = 150
     # Hierarchical: 3 tasks with overlapping 30-dim windows in a 150-dim vector
     hier_tasks = [
@@ -174,7 +174,7 @@ def hierarchical_natty_tests():
         natty_tasks.append(
             SparseRegionTask(vocab, (start/vocab, end/vocab), seed=100+i)
         )
-    for name, tasks in [("Hierarchical", hier_tasks), ("Bag‑of‑Words", natty_tasks)]:
+    for name, tasks in [("Hierarchical", hier_tasks), ("Bag-of-Words", natty_tasks)]:
         baseline = SGMBaseline(tasks[0].input_dim)
         locking = SGMWithLocking(tasks[0].input_dim)
         base_ref = lock_ref = None
@@ -191,7 +191,7 @@ def hierarchical_natty_tests():
             else:
                 b_ratios.append(t.loss(baseline.best_x) / base_ref)
                 l_ratios.append(t.loss(locking.best_x) / lock_ref)
-        print(f"{name} – baseline {np.mean(b_ratios):.2f}, locked {np.mean(l_ratios):.2f}")
+        print(f"{name} -- baseline {np.mean(b_ratios):.2f}, locked {np.mean(l_ratios):.2f}")
 
 def fractal_test():
     print("\n=== Fractal Cosetting Test ===")
@@ -232,7 +232,7 @@ def noise_perturbation_test():
         noise = np.random.randn(dims) * sigma
         perturbed = locked_best + noise
         new_loss = task.loss(perturbed)
-        print(f"σ={sigma:.1f}: loss multiplier {new_loss/base_loss:.2f}×")
+        print(f"sigma={sigma:.1f}: loss multiplier {new_loss/base_loss:.2f}x")
 
 if __name__ == "__main__":
     parameter_scaling_test()

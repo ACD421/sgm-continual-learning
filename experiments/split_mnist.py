@@ -137,7 +137,7 @@ class SyntheticMNIST:
                 sample += np.random.randn(784).astype(np.float32) * 0.2
                 sample = np.clip(sample, 0, 1)
                 
-                # Random shift (±2 pixels)
+                # Random shift (+/-2 pixels)
                 shift = np.random.randint(-2, 3)
                 if shift != 0:
                     sample = sample.reshape(28, 28)
@@ -376,7 +376,7 @@ def run_split_mnist(cfg: Config, output_dir: Path) -> Dict:
         train_result = net.train_task(X_train, y_train, task_name, 
                                        epochs=cfg.epochs_per_task, lr=cfg.lr)
         
-        print(f"  Loss: {train_result['init_loss']:.3f} → {train_result['loss']:.3f}")
+        print(f"  Loss: {train_result['init_loss']:.3f} -> {train_result['loss']:.3f}")
         print(f"  Accuracy: {train_result['acc']*100:.1f}%")
         print(f"  Locked: {train_result['locked']} blocks ({net.stats()['locked_pct']:.1f}% total)")
         
@@ -387,7 +387,7 @@ def run_split_mnist(cfg: Config, output_dir: Path) -> Dict:
             X_eval, y_eval = task_data[eval_name]
             acc = net.accuracy(X_eval, y_eval)
             row.append(acc)
-            print(f"  → {eval_name}: {acc*100:.1f}%")
+            print(f"  -> {eval_name}: {acc*100:.1f}%")
         
         results["tasks"].append(task_name)
         results["accuracy_matrix"].append(row)
@@ -603,13 +603,13 @@ def plot_ascii_retention(results: Dict):
         line = "    |"
         for val in sampled:
             if val >= threshold:
-                line += "█"
+                line += "#"
             else:
                 line += " "
         line += "|"
         print(line)
     print("  0%|" + "-"*width + "|")
-    print(f"     Task 1 {'─'*(width//2-3)} Task {n}")
+    print(f"     Task 1 {'-'*(width//2-3)} Task {n}")
 
 
 def plot_ascii_locked(results: Dict):
@@ -634,7 +634,7 @@ def plot_ascii_locked(results: Dict):
         line = "    |"
         for val in sampled:
             if val >= threshold:
-                line += "▓"
+                line += "="
             else:
                 line += " "
         line += "|"
@@ -645,7 +645,7 @@ def plot_ascii_locked(results: Dict):
 def plot_ascii_blocks(diagram: Dict):
     """ASCII visualization of block locking"""
     print("\n" + "="*60)
-    print("PARAMETER SPACE (█=locked, ░=free)")
+    print("PARAMETER SPACE (#=locked, .=free)")
     print("="*60)
     
     blocks = diagram["blocks"]
@@ -657,7 +657,7 @@ def plot_ascii_blocks(diagram: Dict):
         row_blocks = blocks[i:i+row_size]
         line = f"{i:>4}|"
         for b in row_blocks:
-            line += "█" if b["locked"] else "░"
+            line += "#" if b["locked"] else "."
         line += f"|{min(i+row_size-1, n-1)}"
         print(line)
     

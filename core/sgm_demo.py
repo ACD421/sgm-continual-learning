@@ -230,7 +230,7 @@ def run_demo():
         bm, bs = np.mean(results['baseline'][dims]), np.std(results['baseline'][dims])
         lm, ls = np.mean(results['locking'][dims]), np.std(results['locking'][dims])
         imp = (bm - lm) / bm * 100
-        print(f"{dims:<8} | {bm:.2f}±{bs:.2f}     | {lm:.2f}±{ls:.2f}     | {imp:>+10.0f}%")
+        print(f"{dims:<8} | {bm:.2f}+/-{bs:.2f}     | {lm:.2f}+/-{ls:.2f}     | {imp:>+10.0f}%")
 
     # Key finding
     b_128 = np.mean(results['baseline'][128])
@@ -241,12 +241,12 @@ def run_demo():
     print("\n" + "="*70)
     print("KEY FINDING")
     print("="*70)
-    print(f"\nBaseline scales: {b_128:.2f} → {b_640:.2f} ({(b_128-b_640)/b_128*100:.0f}% improvement with 5× params)")
-    print(f"Locking is flat: {l_128:.2f} → {l_640:.2f} (scale-invariant)")
+    print(f"\nBaseline scales: {b_128:.2f} -> {b_640:.2f} ({(b_128-b_640)/b_128*100:.0f}% improvement with 5x params)")
+    print(f"Locking is flat: {l_128:.2f} -> {l_640:.2f} (scale-invariant)")
     print(f"\n128-dim LOCKED ({l_128:.2f}) vs 640-dim BASELINE ({b_640:.2f})")
 
     if l_128 < b_640:
-        print(f"\n✓ SCALING CURVE BROKEN: Small locked system beats large baseline by {(b_640-l_128)/b_640*100:.0f}%")
+        print(f"\n[OK] SCALING CURVE BROKEN: Small locked system beats large baseline by {(b_640-l_128)/b_640*100:.0f}%")
 
     return results
 

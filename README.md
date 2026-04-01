@@ -71,13 +71,17 @@ pip install -r requirements.txt
 
 # Core proof
 python -c "
-from core.sgm_core_primitives import SGMVector
-v = SGMVector(dim=100)
-v.x = v.optimize_task([1,0,1,0,1], n_evals=500)
-v.lock_converged(threshold=0.01)
-print(f'Locked: {v.lock.sum()}/{v.dim} dims')
-v.x = v.optimize_task([0,1,0,1,0], n_evals=500)
-print(f'Task 1 retention: {v.retention():.4f}x')
+from core.sgm_core_primitives import SGMWithLocking, SparseRegionTask
+import numpy as np
+np.random.seed(42)
+model = SGMWithLocking(dim=100)
+task1 = SparseRegionTask(100, (0.0, 0.5), seed=1)
+task2 = SparseRegionTask(100, (0.5, 1.0), seed=2)
+model.step(task1, 1000)
+t1_loss = task1.loss(model.best_x)
+model.step(task2, 1000)
+print(f'Locked dims: {int(np.sum(model.lock > 0.5))}/100')
+print(f'Task 1 retention: {task1.loss(model.best_x)/t1_loss:.4f}x')
 "
 
 # Full test suite

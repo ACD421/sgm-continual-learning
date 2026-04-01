@@ -465,12 +465,12 @@ def run_all_stress_tests():
     print("""
 EXPECTED RESULTS:
 -----------------
-✓ Task count: Locked retention ~1x across 10-50 tasks
-✓ Overlap: Graceful degradation, still beats baseline
-✓ Capacity: Plasticity preserved up to 95%+ lock saturation  
-✓ Domain shift: Full retention across NLP/Vision/RL boundaries
-✓ Adversarial: Fails on full overlap (expected, No Free Lunch)
-✓ Recovery: Locked dims protected from perturbation
+[OK] Task count: Locked retention ~1x across 10-50 tasks
+[OK] Overlap: Graceful degradation, still beats baseline
+[OK] Capacity: Plasticity preserved up to 95%+ lock saturation  
+[OK] Domain shift: Full retention across NLP/Vision/RL boundaries
+[OK] Adversarial: Fails on full overlap (expected, No Free Lunch)
+[OK] Recovery: Locked dims protected from perturbation
 
 If these pass, the primitive is production-ready for real workloads.
 """)

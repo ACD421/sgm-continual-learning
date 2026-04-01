@@ -19,7 +19,7 @@ Methods Compared:
 
 Output:
     - Accuracy matrices
-    - Final accuracy (mean ± std over 3 seeds)
+    - Final accuracy (mean +/- std over 3 seeds)
     - Backward transfer (forgetting metric)
     - Statistical comparison
 
@@ -562,8 +562,8 @@ def run_benchmark(benchmark_name: str, task_fn, model_fn, methods: dict,
     for name in methods:
         acc = results[name]['final_acc']
         bwt = results[name]['backward_transfer']
-        print(f"{name:<12} | {np.mean(acc)*100:5.1f}% ± {np.std(acc)*100:4.1f}% | "
-              f"{np.mean(bwt)*100:+5.1f}% ± {np.std(bwt)*100:4.1f}%")
+        print(f"{name:<12} | {np.mean(acc)*100:5.1f}% +/- {np.std(acc)*100:4.1f}% | "
+              f"{np.mean(bwt)*100:+5.1f}% +/- {np.std(bwt)*100:4.1f}%")
     
     return results
 
@@ -649,7 +649,7 @@ def main():
         for method_name in results:
             acc = results[method_name]['final_acc']
             bwt = results[method_name]['backward_transfer']
-            print(f"  {method_name:<10}: {np.mean(acc)*100:5.1f}% ± {np.std(acc)*100:.1f}%  "
+            print(f"  {method_name:<10}: {np.mean(acc)*100:5.1f}% +/- {np.std(acc)*100:.1f}%  "
                   f"(BWT: {np.mean(bwt)*100:+.1f}%)")
     
     print(f"\n{'='*70}")
@@ -675,7 +675,7 @@ def main():
                 t_stat = mean_diff / (std_diff / np.sqrt(len(diff))) if std_diff > 0 else 0
                 
                 print(f"\n{bench_name}:")
-                print(f"  SGM - EWC = {mean_diff*100:+.2f}% ± {std_diff*100:.2f}%")
+                print(f"  SGM - EWC = {mean_diff*100:+.2f}% +/- {std_diff*100:.2f}%")
                 print(f"  t-statistic: {t_stat:.2f}")
                 if abs(t_stat) > 2.0:
                     winner = "SGM" if mean_diff > 0 else "EWC"

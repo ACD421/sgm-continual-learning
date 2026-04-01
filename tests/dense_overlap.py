@@ -2,15 +2,15 @@
 Dense Digit Tasks Experiment for Sparse Gradient Mutation (SGM)
 ================================================================
 
-This script evaluates the SGM coalition‑locking primitive on a dense,
-real dataset scenario.  We use the scikit‑learn handwritten digits dataset
+This script evaluates the SGM coalition-locking primitive on a dense,
+real dataset scenario.  We use the scikit-learn handwritten digits dataset
 and create a sequence of binary classification tasks, each involving two
 distinct digits.  All tasks use the full set of input features (64 pixels),
 so parameter interference is maximized: every task depends on every input
 dimension.  This setting is intentionally challenging for SGM, as it
-contrasts with previous experiments that masked non‑overlapping regions.
+contrasts with previous experiments that masked non-overlapping regions.
 
-For each task, we build a small feed‑forward neural network with two hidden
+For each task, we build a small feed-forward neural network with two hidden
 layers and a binary output.  We train the network using the SGM baseline
 (no locking) and the locked variant.  After each task is learned, we
 evaluate retention on previously learned tasks and record the fraction of
@@ -56,7 +56,7 @@ class BinaryDigitTask:
             idx = rng.choice(len(y_ab), max_samples, replace=False)
             X_ab = X_ab[idx]
             y_ab = y_ab[idx]
-        # one‑hot target: [1,0] for digit_a, [0,1] for digit_b
+        # one-hot target: [1,0] for digit_a, [0,1] for digit_b
         targets = np.zeros((len(y_ab), 2), dtype=np.float32)
         targets[y_ab == digit_a, 0] = 1.0
         targets[y_ab == digit_b, 1] = 1.0
@@ -172,7 +172,7 @@ def main():
     baseline_ret, locking_ret, locked_fracs_runs = run_dense_digit_experiment(
         n_tasks=n_tasks, n_evals=n_evals, n_runs=n_runs
     )
-    print("\nDense Digit Tasks (full input) with 64‑64‑32‑2 NN model")
+    print("\nDense Digit Tasks (full input) with 64-64-32-2 NN model")
     print(f"Baseline retention ratios per task: {[f'{r:.2f}' for r in baseline_ret]}")
     print(f"Locked retention ratios per task:   {[f'{r:.2f}' for r in locking_ret]}")
     # mean locked fraction across runs

@@ -1,21 +1,21 @@
 """
-Real‑World Dataset Tests for Sparse Gradient Mutation (SGM)
+Real-World Dataset Tests for Sparse Gradient Mutation (SGM)
 =========================================================
 
-This script evaluates the SGM coalition‑locking primitive on a real
-dataset from scikit‑learn.  It uses the handwritten digits dataset
+This script evaluates the SGM coalition-locking primitive on a real
+dataset from scikit-learn.  It uses the handwritten digits dataset
 (64 features, 10 classes) to create sequential learning tasks.  Each
-task masks a distinct subset of input features and trains a feed‑forward
+task masks a distinct subset of input features and trains a feed-forward
 neural network to predict the digit labels.  The tasks are designed
 to overlap only in the dataset (labels) but use different input
 dimensions, making them realistic yet challenging.
 
 We compare a baseline (no locking) implementation of SGM with a
-coalition‑locking variant.  For each variant we measure the retention
+coalition-locking variant.  For each variant we measure the retention
 ratio on earlier tasks when new tasks are learned, and we report how
 many parameters are locked after each task.  Lower retention ratios
 indicate less forgetting (1.0 = perfect retention).  We use mean
-squared error between the network output and one‑hot label vectors as
+squared error between the network output and one-hot label vectors as
 the loss function.
 
 Usage: run this file directly with ``python3 sgm_real_world_tests.py``.
@@ -34,7 +34,7 @@ from sgm_model_tests import NNModel, SGMBaselineModel, SGMWithLockingModel
 
 
 class DatasetModelTask:
-    """Task using a real dataset with masked inputs and one‑hot targets."""
+    """Task using a real dataset with masked inputs and one-hot targets."""
 
     def __init__(self, model: NNModel, input_mask: np.ndarray, X: np.ndarray, Y: np.ndarray) -> None:
         """
@@ -42,7 +42,7 @@ class DatasetModelTask:
             model: A neural network model (NNModel) whose ``input_dim`` matches ``X.shape[1]``.
             input_mask: Boolean array of shape (input_dim,) indicating which input features are active.
             X: Input samples of shape (n_samples, input_dim).
-            Y: Target labels as one‑hot vectors of shape (n_samples, output_dim).
+            Y: Target labels as one-hot vectors of shape (n_samples, output_dim).
         """
         self.model = model
         self.input_mask = input_mask.astype(bool)
@@ -67,7 +67,7 @@ def build_dataset_tasks(model: NNModel, n_tasks: int, sample_size: int = 200, se
 
     Each task masks a distinct contiguous block of input features.  A
     fixed subset of the dataset is used for all tasks.  Targets are
-    one‑hot encodings of the digit labels.
+    one-hot encodings of the digit labels.
 
     Args:
         model: Neural network model (NNModel) with input dimension 64 and output dimension 10.
@@ -87,7 +87,7 @@ def build_dataset_tasks(model: NNModel, n_tasks: int, sample_size: int = 200, se
     indices = rng.choice(len(X), size=sample_size, replace=False)
     X_subset = X[indices]
     y_subset = y[indices]
-    # one‑hot encode targets
+    # one-hot encode targets
     Y_subset = np.zeros((sample_size, model.output_dim), dtype=np.float32)
     for i, label in enumerate(y_subset):
         Y_subset[i, label] = 1.0
@@ -105,9 +105,9 @@ def build_dataset_tasks(model: NNModel, n_tasks: int, sample_size: int = 200, se
 
 
 def run_real_world_scenario(n_tasks: int = 3, n_evals: int = 200, n_runs: int = 1) -> Tuple[List[float], List[float], List[List[float]]]:
-    """Run a real‑world dataset scenario with baseline and locking SGM.
+    """Run a real-world dataset scenario with baseline and locking SGM.
 
-    Creates a feed‑forward NN model (64‑32‑16‑10) and sequentially trains
+    Creates a feed-forward NN model (64-32-16-10) and sequentially trains
     it on ``n_tasks`` masked tasks derived from the digits dataset.  For
     each run we record the retention ratios on tasks 0 through ``n_tasks-2``
     and the fraction of locked parameters after each task.
@@ -162,14 +162,14 @@ def run_real_world_scenario(n_tasks: int = 3, n_evals: int = 200, n_runs: int = 
 
 
 def main():
-    # Run a quick real‑world scenario
+    # Run a quick real-world scenario
     n_tasks = 3
     n_runs = 2
     n_evals = 200
     baseline_ret, locking_ret, locked_fracs_runs = run_real_world_scenario(
         n_tasks=n_tasks, n_evals=n_evals, n_runs=n_runs
     )
-    print("\nReal‑World Dataset Scenario (digits) with 64‑32‑16‑10 NN")
+    print("\nReal-World Dataset Scenario (digits) with 64-32-16-10 NN")
     print(f"Baseline retention ratios per task: {[f'{r:.2f}' for r in baseline_ret]}")
     print(f"Locked retention ratios per task:   {[f'{r:.2f}' for r in locking_ret]}")
     # Compute mean locked fraction per task across runs

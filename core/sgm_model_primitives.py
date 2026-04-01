@@ -338,16 +338,16 @@ def main():
     nn_tasks = build_tasks_for_model(nn_model, n_tasks, seed=0)
     nn_baseline, nn_locking = run_model_scenario("nn", nn_model, nn_tasks, n_evals, n_runs)
     print("\nFeed-forward NN Model Results")
-    print(f"Baseline retention: {np.mean(nn_baseline):.2f} ± {np.std(nn_baseline):.2f}")
-    print(f"Locking retention: {np.mean(nn_locking):.2f} ± {np.std(nn_locking):.2f}")
+    print(f"Baseline retention: {np.mean(nn_baseline):.2f} +/- {np.std(nn_baseline):.2f}")
+    print(f"Locking retention: {np.mean(nn_locking):.2f} +/- {np.std(nn_locking):.2f}")
     print(f"Improvement: {(np.mean(nn_baseline) - np.mean(nn_locking)) / np.mean(nn_baseline) * 100:+.1f}%")
     # Test transformer-like model
     transformer_model = TransformerModel(input_dim=64, hidden_dim=32, output_dim=10)
     transformer_tasks = build_tasks_for_model(transformer_model, n_tasks, seed=42)
     tr_baseline, tr_locking = run_model_scenario("transformer", transformer_model, transformer_tasks, n_evals, n_runs)
     print("\nTransformer-like Model Results")
-    print(f"Baseline retention: {np.mean(tr_baseline):.2f} ± {np.std(tr_baseline):.2f}")
-    print(f"Locking retention: {np.mean(tr_locking):.2f} ± {np.std(tr_locking):.2f}")
+    print(f"Baseline retention: {np.mean(tr_baseline):.2f} +/- {np.std(tr_baseline):.2f}")
+    print(f"Locking retention: {np.mean(tr_locking):.2f} +/- {np.std(tr_locking):.2f}")
     print(f"Improvement: {(np.mean(tr_baseline) - np.mean(tr_locking)) / np.mean(tr_baseline) * 100:+.1f}%")
 
 

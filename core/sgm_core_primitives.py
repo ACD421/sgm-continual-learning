@@ -5,12 +5,12 @@ SGM Rigorous Scientific Testing
 This script implements a suite of additional tests for the Sparse Gradient
 Mutation (SGM) coalition locking primitive.  It is designed to probe
 the behaviour of the locking mechanism under more challenging and varied
-conditions than the simple non‑overlapping tasks used in the original
+conditions than the simple non-overlapping tasks used in the original
 demo.  The key scenarios include:
 
-1. **Non‑overlapping tasks**: each task uses a distinct contiguous region
+1. **Non-overlapping tasks**: each task uses a distinct contiguous region
    of the parameter vector.  This is the easy case where tasks do not
-   share any dimensions and should show near‑perfect retention when
+   share any dimensions and should show near-perfect retention when
    locking is enabled.
 2. **Partially overlapping tasks**: tasks occupy sliding windows in the
    parameter space so that each task overlaps with the previous one.
@@ -106,7 +106,7 @@ class MaskedRegionTask:
 
 
 class SGMBaseline:
-    """No locking – pure evolutionary search."""
+    """No locking -- pure evolutionary search."""
 
     def __init__(self, dim: int) -> None:
         self.dim = dim
@@ -261,7 +261,7 @@ class SGMWithLocking:
 
 
 def generate_non_overlap_tasks(dims: int, n_tasks: int, seed: int = 0) -> List[SparseRegionTask]:
-    """Generate non‑overlapping tasks splitting the dimensions evenly."""
+    """Generate non-overlapping tasks splitting the dimensions evenly."""
     tasks = []
     for i in range(n_tasks):
         start = i / n_tasks
@@ -386,7 +386,7 @@ def main():
             b_mean, b_std = np.mean(baseline_res["baseline"]), np.std(baseline_res["baseline"])
             l_mean, l_std = np.mean(locking_res["locking"]), np.std(locking_res["locking"])
             improvement = (b_mean - l_mean) / b_mean * 100 if b_mean != 0 else 0.0
-            print(f"  Dims {dims:4d} | Baseline {b_mean:.2f}±{b_std:.2f} | Locking {l_mean:.2f}±{l_std:.2f} | Improvement {improvement:+6.1f}%")
+            print(f"  Dims {dims:4d} | Baseline {b_mean:.2f}+/-{b_std:.2f} | Locking {l_mean:.2f}+/-{l_std:.2f} | Improvement {improvement:+6.1f}%")
 
 
 if __name__ == "__main__":

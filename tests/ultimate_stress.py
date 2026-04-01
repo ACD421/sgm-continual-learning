@@ -10,7 +10,7 @@ Probing edge cases, failure modes, and scalability limits.
 3. Full Overlap / Adversarial
 4. Perturbation / Noise Resistance
 5. Heterogeneous Task Domains
-6. Parameter Scaling (10^6 → 10^9)
+6. Parameter Scaling (10^6 -> 10^9)
 7. Layer/Head/Weight Granularity
 8. Cross-Primitive Composition
 9. Resource/Latency Profiling
@@ -288,7 +288,7 @@ def test_full_overlap_adversarial():
         print(f"      {n_tasks:>3} tasks: Baseline={b_t0:.4f}  Locked={l_t0:.4f}  (Locked {'wins' if l_t0 < b_t0 else 'loses'})")
     
     # Test B: Oscillating targets - extended
-    print("\n  [B] Oscillating targets (A→B→A→B...) - 100 oscillations:")
+    print("\n  [B] Oscillating targets (A->B->A->B...) - 100 oscillations:")
     np.random.seed(42)
     locked = LockedSystem(dim)
     
@@ -398,7 +398,7 @@ def test_perturbation_resistance():
         recovered_degradations = [r/o if o > 0 else 1 for r, o in zip(recovered_losses, original_losses)]
         recovery = np.mean(degradations) / np.mean(recovered_degradations) if np.mean(recovered_degradations) > 0 else 1
         
-        print(f"  {sigma:<12.1f}σ | {avg_deg:>15.2f}x | {max_deg:>15.2f}x | {recovery:>10.2f}x")
+        print(f"  {sigma:<12.1f}sigma | {avg_deg:>15.2f}x | {max_deg:>15.2f}x | {recovery:>10.2f}x")
     
     # Reset and test perturbation on FREE dims
     print("\n  Perturbation on FREE dims (should not affect locked tasks):")
@@ -425,7 +425,7 @@ def test_perturbation_resistance():
         degradations = [p/o if o > 0 else 1 for p, o in zip(perturbed_losses, original_losses)]
         avg_deg = np.mean(degradations)
         
-        print(f"  {sigma:.1f}σ on free dims: Avg degradation = {avg_deg:.4f}x (should be ~1.0)")
+        print(f"  {sigma:.1f}sigma on free dims: Avg degradation = {avg_deg:.4f}x (should be ~1.0)")
     
     return True
 
@@ -511,7 +511,7 @@ def test_heterogeneous_domains():
     l_after, b_after = [], []
     
     # Train 5 tasks per domain, interleaved
-    print("\n  Training sequence: NLP → Vision → Tabular → Audio (5 each)\n")
+    print("\n  Training sequence: NLP -> Vision -> Tabular -> Audio (5 each)\n")
     
     for round_idx in range(5):
         for domain_name, domain_fn, offset in domains:
@@ -576,13 +576,13 @@ def test_heterogeneous_domains():
 
 
 # =============================================================================
-# TEST 6: PARAMETER SCALING (10^6 → 10^9)
+# TEST 6: PARAMETER SCALING (10^6 -> 10^9)
 # =============================================================================
 
 def test_parameter_scaling():
     """Scale from 1M to 1B parameters"""
     print("\n" + "="*70)
-    print("TEST 6: PARAMETER SCALING (10^6 → 10^9)")
+    print("TEST 6: PARAMETER SCALING (10^6 -> 10^9)")
     print("="*70)
     
     # Adjust based on available memory
@@ -1072,14 +1072,14 @@ def test_edge_cases():
     large_loss = loss_fn(locked.x)
     locked.train(loss_fn, n_steps=100, lr=0.1)
     large_after = loss_fn(locked.x)
-    print(f"    Large init (1000): {large_loss:.2e} → {large_after:.2e}")
+    print(f"    Large init (1000): {large_loss:.2e} -> {large_after:.2e}")
     
     # Very small values
     locked.x = np.ones(dim).astype(np.float32) * 1e-10
     small_loss = loss_fn(locked.x)
     locked.train(loss_fn, n_steps=100, lr=0.1)
     small_after = loss_fn(locked.x)
-    print(f"    Small init (1e-10): {small_loss:.2e} → {small_after:.2e}")
+    print(f"    Small init (1e-10): {small_loss:.2e} -> {small_after:.2e}")
     
     # Test B: Sparse data / missing dimensions
     print("\n  [B] Sparse data (90% zeros):")
@@ -1100,7 +1100,7 @@ def test_edge_cases():
     locked.lock_indices(active)  # Only lock active dims
     final_loss = sparse_loss_fn(locked.x)
     
-    print(f"    Sparse task: {init_loss:.4f} → {final_loss:.4f}")
+    print(f"    Sparse task: {init_loss:.4f} -> {final_loss:.4f}")
     print(f"    Locked only active dims: {len(active)} / {dim}")
     
     # Test C: Non-stationary distribution
@@ -1178,7 +1178,7 @@ def test_edge_cases():
     locked.train(loss_fn, n_steps=100)
     final_loss = loss_fn(locked.x)
     
-    print(f"    All dims locked: {init_loss:.4f} → {final_loss:.4f} (should be unchanged)")
+    print(f"    All dims locked: {init_loss:.4f} -> {final_loss:.4f} (should be unchanged)")
     
     return True
 
@@ -1238,7 +1238,7 @@ def run_all():
     print("="*70)
     
     for i in range(1, 11):
-        status = "✓ PASS" if results[i] else "✗ FAIL"
+        status = "[OK] PASS" if results[i] else "[FAIL] FAIL"
         print(f"  Test {i:>2}: {status}")
 
 
@@ -1277,7 +1277,7 @@ def main():
         print("  3. Full Overlap / Adversarial")
         print("  4. Perturbation Resistance")
         print("  5. Heterogeneous Domains")
-        print("  6. Parameter Scaling (10^6 → 10^9)")
+        print("  6. Parameter Scaling (10^6 -> 10^9)")
         print("  7. Layer/Head/Weight Granularity")
         print("  8. Cross-Primitive Composition")
         print("  9. Resource Profiling")

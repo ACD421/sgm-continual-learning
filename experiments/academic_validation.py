@@ -25,7 +25,7 @@ immutable, forcing subsequent learning into orthogonal subspaces. We demonstrate
 Unlike regularization methods (EWC, SI) or replay-based approaches, our
 primitive provides hard guarantees: locked parameters cannot change by
 definition. Unlike architecture-based methods (Progressive Nets), capacity
-is fixed. Unlike pruning methods (PackNet), no task labels are required—
+is fixed. Unlike pruning methods (PackNet), no task labels are required--
 locking is triggered by convergence detection.
 
 STRUCTURE
@@ -292,7 +292,7 @@ class SyntheticTests:
         
         print(f"  Trials: {trials}")
         print(f"  Violations: {violations}")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a1_fundamental'] = {
             'passed': passed,
@@ -372,7 +372,7 @@ class SyntheticTests:
         print(f"  Seeds: {self.config.n_seeds}")
         print(f"  Retention ratio: {mean:.6f} [{ci_lo:.6f}, {ci_hi:.6f}]")
         print(f"  Perfect retention: 1.000000")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a2_isolation'] = {
             'passed': passed,
@@ -462,7 +462,7 @@ class SyntheticTests:
         print(f"  Tasks: {n_tasks}")
         print(f"  Seeds: {self.config.n_seeds}")
         print(f"  Mean retention: {mean:.6f} [{ci_lo:.6f}, {ci_hi:.6f}]")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a3_sequential'] = {
             'passed': passed,
@@ -550,7 +550,7 @@ class SyntheticTests:
         
         print(f"  Seeds: {self.config.n_seeds}")
         print(f"  Mean retention: {mean:.6f} [{ci_lo:.6f}, {ci_hi:.6f}]")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a4_gradient'] = {
             'passed': passed,
@@ -638,7 +638,7 @@ class SyntheticTests:
         # Check all are ~1.0
         all_perfect = all(abs(r['mean'] - 1.0) < 0.001 for r in scale_results)
         
-        print(f"\n  Result: {'✓ PASS' if all_perfect else '✗ FAIL'}")
+        print(f"\n  Result: {'[OK] PASS' if all_perfect else '[FAIL] FAIL'}")
         
         self.results['a5_scale'] = {
             'passed': all_perfect,
@@ -761,7 +761,7 @@ class SyntheticTests:
         h0_rejected = p_value < 0.05 and s_mean < r_mean
         
         print(f"\n  H0 Rejected: {'YES' if h0_rejected else 'NO'}")
-        print(f"  Result: {'✓ PASS' if h0_rejected else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if h0_rejected else '[FAIL] FAIL'}")
         
         self.results['a6_structured_vs_random'] = {
             'passed': h0_rejected,
@@ -798,7 +798,7 @@ class SyntheticTests:
         saturations = [0.0, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99]
         n_trials = 10
         
-        # Same task for all: minimize ||Wx - t||²
+        # Same task for all: minimize ||Wx - t||^2
         np.random.seed(42)
         W = np.random.randn(dim, 16) * 0.1
         target = np.random.randn(16)
@@ -885,15 +885,15 @@ class SyntheticTests:
         exp_ss_res = np.sum((per_dims - exp_pred)**2)
         exp_r2 = 1 - exp_ss_res / lin_ss_tot if lin_ss_tot > 0 else 0
         
-        print(f"\n  Linear R²: {lin_r2:.4f}")
-        print(f"  Exponential R²: {exp_r2:.4f}")
-        print(f"  Exponential rate (α): {exp_slope:.4f}")
+        print(f"\n  Linear R^2: {lin_r2:.4f}")
+        print(f"  Exponential R^2: {exp_r2:.4f}")
+        print(f"  Exponential rate (alpha): {exp_slope:.4f}")
         
         # Super-linear if ratio > 10x
         is_superlinear = ratio > 10
         
         print(f"\n  Super-linear scaling (>10x): {'YES' if is_superlinear else 'NO'}")
-        print(f"  Result: {'✓ PASS' if is_superlinear else '~ PARTIAL'}")
+        print(f"  Result: {'[OK] PASS' if is_superlinear else '~ PARTIAL'}")
         
         self.results['a7_plasticity'] = {
             'passed': is_superlinear,
@@ -991,7 +991,7 @@ class SyntheticTests:
         passed = p_value < 0.05 and s_mean < r_mean
         
         print(f"\n  Lower interference: {'YES' if passed else 'NO'}")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a8_orthogonality'] = {
             'passed': passed,
@@ -1055,7 +1055,7 @@ class SyntheticTests:
         
         passed = tasks_learned == theoretical_max
         
-        print(f"\n  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"\n  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a9_capacity'] = {
             'passed': passed,
@@ -1383,7 +1383,7 @@ if TORCH_AVAILABLE:
             
             passed = s_mean > b_mean or np.mean(s_bwts) > np.mean(b_bwts)
             
-            print(f"\n  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+            print(f"\n  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
             
             self.results['b1_split_mnist'] = {
                 'passed': passed,
@@ -1441,7 +1441,7 @@ def generate_summary(synthetic_results: Dict, real_results: Dict = None) -> str:
         if key in synthetic_results:
             passed = synthetic_results[key].get('passed', False)
             passed_count += 1 if passed else 0
-            status = '✓' if passed else '✗'
+            status = '[OK]' if passed else '[FAIL]'
             lines.append(f"  {status} {name}")
     
     lines.append(f"\n  Synthetic: {passed_count}/{len(synth_tests)} tests passed")
@@ -1452,7 +1452,7 @@ def generate_summary(synthetic_results: Dict, real_results: Dict = None) -> str:
         
         if 'b1_split_mnist' in real_results:
             r = real_results['b1_split_mnist']
-            status = '✓' if r['passed'] else '✗'
+            status = '[OK]' if r['passed'] else '[FAIL]'
             lines.append(f"  {status} B1: Split-MNIST")
             lines.append(f"     Baseline: {r['baseline_acc'][0]:.3f}, BWT: {r['baseline_bwt']:.3f}")
             lines.append(f"     SGM:      {r['sgm_acc'][0]:.3f}, BWT: {r['sgm_bwt']:.3f}")
@@ -1462,15 +1462,15 @@ def generate_summary(synthetic_results: Dict, real_results: Dict = None) -> str:
     
     if 'a6_structured_vs_random' in synthetic_results:
         r = synthetic_results['a6_structured_vs_random']
-        lines.append(f"  • Structured vs Random: Cohen's d = {r['cohens_d']:.2f} "
+        lines.append(f"  - Structured vs Random: Cohen's d = {r['cohens_d']:.2f} "
                     f"(p = {r['p_value']:.2e})")
     
     if 'a7_plasticity' in synthetic_results:
         r = synthetic_results['a7_plasticity']
-        lines.append(f"  • Per-dim plasticity ratio (99% vs 0%): {r['ratio']:.1f}x")
+        lines.append(f"  - Per-dim plasticity ratio (99% vs 0%): {r['ratio']:.1f}x")
     
     if 'a5_scale' in synthetic_results:
-        lines.append(f"  • Scale invariance: Perfect retention 100-10000 dims")
+        lines.append(f"  - Scale invariance: Perfect retention 100-10000 dims")
     
     # Verdict
     lines.append("\n" + "="*70)

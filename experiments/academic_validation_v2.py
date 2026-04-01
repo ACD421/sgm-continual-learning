@@ -185,7 +185,7 @@ class SyntheticTests:
         
         passed = violations == 0
         print(f"  Trials: {trials}, Violations: {violations}")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a1_fundamental'] = {'passed': passed, 'violations': violations}
         return self.results['a1_fundamental']
@@ -228,7 +228,7 @@ class SyntheticTests:
         passed = np.allclose(retention_ratios, 1.0)
         
         print(f"  Retention: {mean:.6f} [{ci_lo:.6f}, {ci_hi:.6f}]")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a2_isolation'] = {'passed': passed, 'retention_mean': mean}
         return self.results['a2_isolation']
@@ -278,7 +278,7 @@ class SyntheticTests:
         passed = np.allclose(all_retentions, 1.0)
         
         print(f"  Tasks: {n_tasks}, Retention: {mean:.6f}")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a3_sequential'] = {'passed': passed, 'retention_mean': mean}
         return self.results['a3_sequential']
@@ -326,7 +326,7 @@ class SyntheticTests:
         passed = np.allclose(all_retentions, 1.0)
         
         print(f"  Retention: {mean:.6f}")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a4_gradient'] = {'passed': passed, 'retention_mean': mean}
         return self.results['a4_gradient']
@@ -383,7 +383,7 @@ class SyntheticTests:
             print(f"  {r['dim']:>8} | {r['mean']:.6f}")
         
         passed = all(abs(r['mean'] - 1.0) < 0.001 for r in scale_results)
-        print(f"\n  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"\n  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a5_scale'] = {'passed': passed, 'results': scale_results}
         return self.results['a5_scale']
@@ -465,7 +465,7 @@ class SyntheticTests:
         
         passed = p_value < 0.05 and s_mean < r_mean
         print(f"\n  H0 Rejected: {'YES' if passed else 'NO'}")
-        print(f"  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+        print(f"  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
         
         self.results['a6_structured_vs_random'] = {
             'passed': passed, 'p_value': p_value, 'cohens_d': effect
@@ -877,12 +877,12 @@ if TORCH_AVAILABLE:
             print(f"\n" + "="*70)
             print(f"AGGREGATE ({self.config.n_seeds} seeds)")
             print("="*70)
-            print(f"  Baseline: Acc={np.mean(b_accs):.3f}±{np.std(b_accs):.3f}, Fgt={np.mean(b_fgts):.3f}")
-            print(f"  SGM:      Acc={np.mean(s_accs):.3f}±{np.std(s_accs):.3f}, Fgt={np.mean(s_fgts):.3f}")
+            print(f"  Baseline: Acc={np.mean(b_accs):.3f}+/-{np.std(b_accs):.3f}, Fgt={np.mean(b_fgts):.3f}")
+            print(f"  SGM:      Acc={np.mean(s_accs):.3f}+/-{np.std(s_accs):.3f}, Fgt={np.mean(s_fgts):.3f}")
             print(f"  Forgetting p={p_fgt:.4f}, Cohen's d={effect_fgt:.2f}")
             
             passed = np.mean(s_fgts) < np.mean(b_fgts)
-            print(f"\n  Result: {'✓ PASS' if passed else '✗ FAIL'}")
+            print(f"\n  Result: {'[OK] PASS' if passed else '[FAIL] FAIL'}")
             
             self.results['b1'] = {
                 'passed': passed,
@@ -1012,8 +1012,8 @@ if TORCH_AVAILABLE:
             for method in methods:
                 accs = np.array([r['acc'] for r in all_results[method]])
                 fgts = np.array([r['fgt'] for r in all_results[method]])
-                print(f"  {method:<12} | {np.mean(accs):.3f} ± {np.std(accs):.3f} | "
-                      f"{np.mean(fgts):.3f} ± {np.std(fgts):.3f}")
+                print(f"  {method:<12} | {np.mean(accs):.3f} +/- {np.std(accs):.3f} | "
+                      f"{np.mean(fgts):.3f} +/- {np.std(fgts):.3f}")
             
             # SGM vs others
             sgm_fgts = np.array([r['fgt'] for r in all_results['sgm']])
@@ -1101,8 +1101,8 @@ if TORCH_AVAILABLE:
                 accs = np.array([r['acc'] for r in budget_results[budget]])
                 fgts = np.array([r['fgt'] for r in budget_results[budget]])
                 sats = np.array([r['sat'] for r in budget_results[budget]])
-                print(f"  {budget*100:>8.1f}% | {np.mean(accs):.3f} ± {np.std(accs):.3f} | "
-                      f"{np.mean(fgts):.3f} ± {np.std(fgts):.3f} | {np.mean(sats)*100:.1f}%")
+                print(f"  {budget*100:>8.1f}% | {np.mean(accs):.3f} +/- {np.std(accs):.3f} | "
+                      f"{np.mean(fgts):.3f} +/- {np.std(fgts):.3f} | {np.mean(sats)*100:.1f}%")
             
             self.results['b3'] = budget_results
             return self.results['b3']
@@ -1132,7 +1132,7 @@ def generate_summary(synth_results: Dict, real_results: Dict = None) -> str:
     total = len(synth_results)
     
     for key, result in synth_results.items():
-        status = '✓' if result.get('passed', False) else '✗'
+        status = '[OK]' if result.get('passed', False) else '[FAIL]'
         lines.append(f"  {status} {key}")
     
     lines.append(f"\n  Passed: {passed}/{total}")

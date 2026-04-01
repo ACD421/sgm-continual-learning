@@ -5,7 +5,7 @@ Extended model experiments for Sparse Gradient Mutation (SGM)
 This script builds upon the earlier ``sgm_model_tests.py`` and ``sgm_extended_tests.py``
 to evaluate the SGM coalition locking primitive in several new scenarios:
 
-1. **Inference‑time sparsity** for neural network (NN) and transformer‑like models.
+1. **Inference-time sparsity** for neural network (NN) and transformer-like models.
    For each model, we measure how the fraction of locked dimensions grows as new tasks
    are learned.  This illustrates how much of the parameter space remains active
    during inference for the locked variant compared to a baseline that never locks.
@@ -18,10 +18,10 @@ to evaluate the SGM coalition locking primitive in several new scenarios:
 3. **Parameter scaling** for NN and transformer models.  We vary the input/hidden
    dimensionality and observe how the retention ratio changes with model size for
    baseline and locked systems.  The goal is to show that locked models maintain
-   near‑constant retention while baselines degrade rapidly.
+   near-constant retention while baselines degrade rapidly.
 
 4. **Hybrid NN+ML model** experiments.  We combine a neural network with a
-   logistic regression head to form a hybrid model with both non‑linear and
+   logistic regression head to form a hybrid model with both non-linear and
    linear components.  We then evaluate personalization performance on this
    hybrid architecture.
 
@@ -48,7 +48,7 @@ from sgm_model_tests import (
 )
 
 def build_tasks_for_model(model, n_tasks: int, seed: int = 0) -> List[ModelTask]:
-    """Create a list of ModelTask objects with non‑overlapping input masks.
+    """Create a list of ModelTask objects with non-overlapping input masks.
 
     Each task activates a contiguous segment of the input dimensions.  A new
     random target vector is generated for each task.
@@ -77,7 +77,7 @@ def build_tasks_for_model(model, n_tasks: int, seed: int = 0) -> List[ModelTask]
 
 
 def measure_inference_sparsity_model(model, n_tasks: int = 4, n_evals: int = 300, n_runs: int = 1) -> Tuple[List[float], List[float]]:
-    """Measure inference‑time sparsity for a given model.
+    """Measure inference-time sparsity for a given model.
 
     Runs ``n_tasks`` sequential synthetic tasks on both a baseline (no locking)
     and the locked SGM model.  After each task, records the fraction of locked
@@ -357,14 +357,14 @@ def run_hybrid_personalization(input_dim: int = 64, hidden_dim1: int = 32, hidde
 
 
 def main():
-    # Experiment 1: Inference‑time sparsity for NN and transformer
+    # Experiment 1: Inference-time sparsity for NN and transformer
     nn_model = NNModel(input_dim=64, hidden_dim1=32, hidden_dim2=16, output_dim=8)
     tr_model = TransformerModel(input_dim=64, hidden_dim=32, output_dim=8)
-    print("\nInference‑time sparsity (NN model)")
+    print("\nInference-time sparsity (NN model)")
     nn_b_fracs, nn_l_fracs = measure_inference_sparsity_model(nn_model, n_tasks=4, n_evals=300, n_runs=2)
     for i, (b, l) in enumerate(zip(nn_b_fracs, nn_l_fracs), start=1):
         print(f"  After task {i}: baseline locked {b:.2f}, locking locked {l:.2f}")
-    print("\nInference‑time sparsity (Transformer model)")
+    print("\nInference-time sparsity (Transformer model)")
     tr_b_fracs, tr_l_fracs = measure_inference_sparsity_model(tr_model, n_tasks=4, n_evals=300, n_runs=2)
     for i, (b, l) in enumerate(zip(tr_b_fracs, tr_l_fracs), start=1):
         print(f"  After task {i}: baseline locked {b:.2f}, locking locked {l:.2f}")

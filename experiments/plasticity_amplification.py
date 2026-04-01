@@ -5,7 +5,7 @@ This script investigates how the Sparse Gradient Mutation (SGM) coalition-lockin
 primitive influences the magnitude of parameter updates as more tasks are learned.
 The goal is to test the hypothesis that, as the number of free dimensions
 decreases due to locking, the remaining free dimensions exhibit "hyper
-amplification" of plasticity—i.e., their update magnitudes grow to compensate
+amplification" of plasticity--i.e., their update magnitudes grow to compensate
 for the reduced parameter space.
 
 We compare a baseline model (no locking) with the locked SGM model on a
@@ -117,11 +117,11 @@ def main() -> None:
         b = baseline_updates[i]
         f = free_updates[i]
         lf = locked_fracs[i]
-        print(f"  Task {i+1}: baseline Δ = {b:.4f}, free Δ = {f:.4f}, locked frac = {lf:.2f}")
+        print(f"  Task {i+1}: baseline Delta = {b:.4f}, free Delta = {f:.4f}, locked frac = {lf:.2f}")
     print("\nInterpretation:")
     print("Baseline updates remain relatively constant since all parameters are mutable.")
     print("For the locked model, free parameter updates grow as more dims are locked, confirming\n" +
-          "the 'hyper‑amplification' hypothesis: as the free subspace shrinks, the same learning\n" +
+          "the 'hyper-amplification' hypothesis: as the free subspace shrinks, the same learning\n" +
           "signal is concentrated on fewer parameters, increasing their plasticity.")
 
 

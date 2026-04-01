@@ -132,19 +132,19 @@ def main():
         model_type="nn", n_tasks=n_tasks, n_evals=n_evals, n_runs=n_runs, n_bits=n_bits
     )
     print("\nFeed-forward NN quantization test ({}-bit)".format(n_bits))
-    print("Baseline retention (float): {:.2f} ± {:.2f}".format(np.mean(base), np.std(base)))
-    print("Baseline retention (quantized): {:.2f} ± {:.2f}".format(np.mean(base_q), np.std(base_q)))
-    print("Locked retention (float): {:.2f} ± {:.2f}".format(np.mean(lock), np.std(lock)))
-    print("Locked retention (quantized): {:.2f} ± {:.2f}".format(np.mean(lock_q), np.std(lock_q)))
+    print("Baseline retention (float): {:.2f} +/- {:.2f}".format(np.mean(base), np.std(base)))
+    print("Baseline retention (quantized): {:.2f} +/- {:.2f}".format(np.mean(base_q), np.std(base_q)))
+    print("Locked retention (float): {:.2f} +/- {:.2f}".format(np.mean(lock), np.std(lock)))
+    print("Locked retention (quantized): {:.2f} +/- {:.2f}".format(np.mean(lock_q), np.std(lock_q)))
     # Optionally test transformer-like model
     base_tr, base_tr_q, lock_tr, lock_tr_q = run_quantized_scenario(
         model_type="transformer", n_tasks=n_tasks, n_evals=n_evals, n_runs=n_runs, n_bits=n_bits
     )
     print("\nTransformer-like quantization test ({}-bit)".format(n_bits))
-    print("Baseline retention (float): {:.2f} ± {:.2f}".format(np.mean(base_tr), np.std(base_tr)))
-    print("Baseline retention (quantized): {:.2f} ± {:.2f}".format(np.mean(base_tr_q), np.std(base_tr_q)))
-    print("Locked retention (float): {:.2f} ± {:.2f}".format(np.mean(lock_tr), np.std(lock_tr)))
-    print("Locked retention (quantized): {:.2f} ± {:.2f}".format(np.mean(lock_tr_q), np.std(lock_tr_q)))
+    print("Baseline retention (float): {:.2f} +/- {:.2f}".format(np.mean(base_tr), np.std(base_tr)))
+    print("Baseline retention (quantized): {:.2f} +/- {:.2f}".format(np.mean(base_tr_q), np.std(base_tr_q)))
+    print("Locked retention (float): {:.2f} +/- {:.2f}".format(np.mean(lock_tr), np.std(lock_tr)))
+    print("Locked retention (quantized): {:.2f} +/- {:.2f}".format(np.mean(lock_tr_q), np.std(lock_tr_q)))
 
 
 if __name__ == "__main__":

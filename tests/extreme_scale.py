@@ -296,7 +296,7 @@ def stress_test_massive_task_count(n_tasks: int = 500, dim: int = 5000):
 def stress_test_scale(dims: List[int] = [1000, 10000, 100000, 1000000, 10000000]):
     """Test: Scale from 1K to 10M parameters"""
     print(f"\n{'='*70}")
-    print("STRESS TEST 2: PARAMETER SCALING (1K → 10M)")
+    print("STRESS TEST 2: PARAMETER SCALING (1K -> 10M)")
     print(f"{'='*70}")
     
     n_tasks = 20
@@ -495,7 +495,7 @@ def stress_test_adversarial_extreme():
     after = loss_fn(locked.x)
     
     print(f"      Before perturbation: {before:.4f}")
-    print(f"      After 2σ perturbation of locked dims: {after:.4f}")
+    print(f"      After 2sigma perturbation of locked dims: {after:.4f}")
     print(f"      (This tests if locked VALUES are protected, not just mask)")
 
 
@@ -677,10 +677,8 @@ def main():
         print("\nRunning FULL stress test battery...\n")
         run_full_tests()
     else:
-        print("\nNo mode specified. Use --quick or --full")
-        print("  --quick: ~1-2 min sanity check")
-        print("  --full:  ~10-30 min complete stress test")
-        sys.exit(1)
+        print("\nNo mode specified, defaulting to --quick...\n")
+        run_quick_tests()
     
     total_time = time.time() - start_time
     
@@ -692,14 +690,14 @@ def main():
     print("""
 KEY METRICS TO VERIFY:
 ----------------------
-✓ 500 tasks: Locked retention should stay ~1.0x throughout
-✓ 10M scale: Retention gap should INCREASE with scale (Kaplan violation)
-✓ Real dims: 768/1024/4096 should all show ~1x retention
-✓ Transformer sim: All 12 layers retained after sequential training
-✓ Adversarial: 100% overlap should fail (boundary condition)
-✓ Capacity: Plasticity preserved even at 99.9% lock saturation
-✓ Mixed overlap: Graceful degradation on high-overlap tasks
-✓ Transfer: Positive forward transfer, near-zero backward interference
+[OK] 500 tasks: Locked retention should stay ~1.0x throughout
+[OK] 10M scale: Retention gap should INCREASE with scale (Kaplan violation)
+[OK] Real dims: 768/1024/4096 should all show ~1x retention
+[OK] Transformer sim: All 12 layers retained after sequential training
+[OK] Adversarial: 100% overlap should fail (boundary condition)
+[OK] Capacity: Plasticity preserved even at 99.9% lock saturation
+[OK] Mixed overlap: Graceful degradation on high-overlap tasks
+[OK] Transfer: Positive forward transfer, near-zero backward interference
 
 If all pass, the primitive is validated for production deployment.
 """)
